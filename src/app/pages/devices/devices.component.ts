@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DeviceService } from 'src/app/services/device.service';
 import { CategoryService } from 'src/app/services/category.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-devices',
   templateUrl: './devices.component.html',
-  styleUrls: ['./devices.component.css']
+  styleUrls: ['./devices.component.css'],
+  providers: [MessageService, ConfirmationService]
 })
 export class DevicesComponent implements OnInit {
   devices: any[] = [];
@@ -14,9 +16,11 @@ export class DevicesComponent implements OnInit {
   deviceForm: FormGroup;
 
   constructor(
-    private deviceService: DeviceService, 
-    private categoryService: CategoryService, 
-    private fb: FormBuilder
+    private deviceService: DeviceService,
+    private categoryService: CategoryService,
+    private fb: FormBuilder,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) {
     this.deviceForm = this.fb.group({
       categoryId: ['', Validators.required],
@@ -44,8 +48,6 @@ export class DevicesComponent implements OnInit {
 
   createDevice() {
     if (this.deviceForm.valid) {
-
-      console.log(this.deviceForm.value)
       this.deviceService.create(this.deviceForm.value).subscribe(() => {
         this.loadDevices();
         this.deviceForm.reset();
@@ -53,9 +55,23 @@ export class DevicesComponent implements OnInit {
     }
   }
 
+  confirmDelete(id: number) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this device?',
+      accept: () => {
+        this.deleteDevice(id);
+      }
+    });
+  }
+
   deleteDevice(id: number) {
     this.deviceService.delete(id).subscribe(() => {
       this.loadDevices();
     });
+  }
+
+  getCategoryName(categoryId: number): string {
+    const category = this.categories.find(c => c.id === categoryId);
+    return category ? category.name : 'Unknown';
   }
 }

@@ -1,8 +1,16 @@
-<nav>
+<p-menubar  [model]="items">
+  <button
+    pButton
+
+    icon="pi pi-power-off"
+  ></button>
+</p-menubar>
+
+
+<!-- <nav>
     <ul>
       <li><a routerLink="/categories">Gerenciamento de Categorias</a></li>
       <li><a routerLink="/devices">Gerenciamento de Dispositivos</a></li>
     </ul>
-  </nav>
+  </nav> -->
   <router-outlet></router-outlet>
-  
