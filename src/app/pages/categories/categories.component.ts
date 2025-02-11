@@ -52,15 +52,52 @@ export class CategoriesComponent implements OnInit {
         this.deleteCategory(id);
       },
       reject: () => {
-        this.messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Category deletion cancelled.' });
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelled',
+          detail: 'Category deletion cancelled.'
+        });
       }
     });
   }
 
   deleteCategory(id: number) {
-    this.categoryService.delete(id).subscribe(() => {
-      this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Category successfully deleted.' });
-      this.loadCategories();
-    });
+    this.categoryService.delete(id).subscribe(
+      () => {
+        this.messageService.add({
+          severity: "success",
+          summary: "Deleted",
+          detail: "Category successfully deleted.",
+        });
+        this.loadCategories();
+      },
+      (error) => {
+        console.error("❌ Error deleting category:", error);
+
+        // 🔹 Captura e exibe a mensagem do backend
+        if (error.status === 400) {
+          this.messageService.add({
+            severity: "warn",
+            summary: "Cannot Delete",
+            detail: error.error.message || "This category has linked devices and cannot be deleted.",
+          });
+        } else if (error.status === 404) {
+          this.messageService.add({
+            severity: "warn",
+            summary: "Not Found",
+            detail: "Category does not exist.",
+          });
+        } else {
+          this.messageService.add({
+            severity: "error",
+            summary: "Error",
+            detail: error.error.message || "An error occurred while deleting the category.",
+          });
+        }
+      }
+    );
   }
+
+
+
 }

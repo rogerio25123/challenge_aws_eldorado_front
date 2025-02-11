@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit {
   ) {
     this.items = [
       {
-        label: 'Cadastros',
+        label: 'Registrations ',
         icon: 'pi pi-plus-circle',
         items: [
           {
