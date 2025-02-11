@@ -1,0 +1,17 @@
+<h2>Gerenciamento de Dispositivos</h2>
+
+<form [formGroup]="deviceForm" (ngSubmit)="createDevice()">
+  <select formControlName="categoryId">
+    <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+  </select>
+  <input type="text" formControlName="color" placeholder="Cor">
+  <input type="text" formControlName="partNumber" placeholder="Número da Peça">
+  <button type="submit" [disabled]="deviceForm.invalid">Criar</button>
+</form>
+
+<ul>
+  <li *ngFor="let device of devices">
+    {{ device.color }} - {{ device.partNumber }}
+    <button (click)="deleteDevice(device.id)">Excluir</button>
+  </li>
+</ul>

@@ -1,0 +1,13 @@
+<h2>Gerenciamento de Categorias</h2>
+
+<form [formGroup]="categoryForm" (ngSubmit)="createCategory()">
+  <input type="text" formControlName="name" placeholder="Nome da Categoria">
+  <button type="submit" [disabled]="categoryForm.invalid">Criar</button>
+</form>
+
+<ul>
+  <li *ngFor="let category of categories">
+    {{ category.name }} 
+    <button (click)="deleteCategory(category.id)">Excluir</button>
+  </li>
+</ul>
